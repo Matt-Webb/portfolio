@@ -1,10 +1,6 @@
-﻿
 (function () {
-
     "use strict";
-
     var app = angular.module('webbApp', ['ngRoute', 'ngMap', 'ngAnimate']);
-
 }());
 
 (function (app) {
@@ -16,49 +12,49 @@
     */
     app.config(['$routeProvider', function ($routeProvider) {
 
-		var routes = [
-			{ // HOME
-				url: "/",
-				config: {
-					templateUrl: "partials/home.html",
-					controller: "webbBodyController"
-				}
-			},
-			{ // PAGES
-				url: "/work",
-				config: {
-					templateUrl: "partials/work.html",
-					controller: "webbBodyController"
-				}
-			},
-			{
-				url: "/experiences",
-				config: {
-					templateUrl: "partials/experiences.html",
-					controller: "webbBodyController"
-				}
-			},
-            {
-                url: "/chess",
-                config: {
-                    templateUrl: "partials/chess.html",
-                    controller: "webbChessController"
-                }
-            },
-			{
-				url: "/contact",
-				config: {
-					templateUrl: "partials/contact.html",
-					controller: "webbBodyController"
-				}
-			}
-		];
+    		var routes = [
+    			{ // HOME
+    				url: "/",
+    				config: {
+    					templateUrl: "partials/home.html",
+    					controller: "webbBodyController"
+    				}
+    			},
+    			{ // PAGES
+    				url: "/work",
+    				config: {
+    					templateUrl: "partials/work.html",
+    					controller: "webbBodyController"
+    				}
+    			},
+    			{
+    				url: "/experiences",
+    				config: {
+    					templateUrl: "partials/experiences.html",
+    					controller: "webbBodyController"
+    				}
+    			},
+                {
+                    url: "/chess",
+                    config: {
+                        templateUrl: "partials/chess.html",
+                        controller: "webbChessController"
+                    }
+                },
+    			{
+    				url: "/contact",
+    				config: {
+    					templateUrl: "partials/contact.html",
+    					controller: "webbBodyController"
+    				}
+    			}
+    		];
 
-		routes.forEach(function(route) {
-			$routeProvider.when(route.url, route.config);
-		});
+    		routes.forEach(function(route) {
+    			$routeProvider.when(route.url, route.config);
+    		});
 
-		$routeProvider.otherwise("/404", { templateUrl: "partials/404.html", controller: "webbBodyController" });
+    		$routeProvider.otherwise("/404", { templateUrl: "partials/404.html", controller: "webbBodyController" });
 
     }]);
 
@@ -77,25 +73,35 @@
         $scope.tableHeaders = ["Name", "Title", "Grade", "Result", "Color", "Date"];
 
         $.get('data/data.json', function (data) {
-          console.log("success", data);
+
+          // array to enable me to create js date object for correct table sorting:
+          $scope.tableData = [];
+
+          // parse response into JavaScript:
           $scope.data = angular.fromJson(data);
+
+          // loop the results and bind to object before pushing to table data:
+          $.each($scope.data, function(index, object) {
+              var dateSplit = object.date.split('-');
+              var player = {
+                id: object.id,
+                name: object.name,
+                title: object.title,
+                grade: object.grade,
+                result: object.result,
+                color: object.color,
+                date: new Date(dateSplit[2], dateSplit[1], dateSplit[0])
+              };
+              $scope.tableData.push(player);
+          });
+          // important for rendering:
           $scope.$apply();
         });
 
-    });
-
-    app.controller("dataImagesWork", function ($scope) {
-        $scope.images_work = [
-              { num: 1, category: 'marketing', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 2, category: 'branding', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 3, category: 'design', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 4, category: 'photo', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 5, category: 'marketing', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 6, category: 'design', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 7, category: 'photo', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 8, category: 'marketing', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" },
-              { num: 9, category: 'design', src: "1100x1057", description: 'Oscar is a decent man. He used to clean porches with pleasure. ', url_details: "details.html" }];
-
+        // default table filters:
+        $scope.sortType = 'date';
+        $scope.sortReverse = false;
+        $scope.searchPlayer = '';
     });
 
 
@@ -149,4 +155,4 @@
 
 	});
 
-}(angular.module('webbApp')));
+} (angular.module('webbApp')));

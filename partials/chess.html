@@ -3,18 +3,68 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Chess</h1>
+                <form class="col-md-offset-3 col-md-6">
+                 <div class="form-group">
+                   <div class="input-group">
+                     <div class="input-group-addon"><i class="fa fa-search"></i></div>
+
+                     <input type="text" class="form-control" placeholder="Search my results" ng-model="searchPlayer">
+
+                   </div>
+                 </div>
+               </form>
+
                 <div class="box-content contact">
 
                     <table class="table padded table-hover">
                         <thead>
                             <tr>
-                                <th ng-repeat="heading in tableHeaders">
-                                    {{ heading }}
+                                <th>
+                                    <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                      Name
+                                      <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                      <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'title'; sortReverse = !sortReverse">
+                                  Title
+                                  <span ng-show="sortType == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'title' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'grade'; sortReverse = !sortReverse">
+                                  Grade
+                                  <span ng-show="sortType == 'grade' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'grade' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'result'; sortReverse = !sortReverse">
+                                  Result
+                                  <span ng-show="sortType == 'result' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'result' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'color'; sortReverse = !sortReverse">
+                                  Colour
+                                  <span ng-show="sortType == 'color' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'color' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'date'; sortReverse = !sortReverse">
+                                  Date
+                                  <span ng-show="sortType == 'date' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'date' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="player in data | orderBy: '-grade'">
+                            <tr ng-repeat="player in tableData | orderBy: sortType:sortReverse | filter:searchPlayer">
                                 <td><a target="_blank" href="http://www.ecfgrading.org.uk/new/menu.php?PlayerCode={{ row[0] }}&file=player">{{ player.name }}</a></td>
                                 <td>{{ player.title }}</td>
                                 <td>{{ player.grade }}</td>
