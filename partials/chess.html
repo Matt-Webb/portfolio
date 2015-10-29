@@ -1,0 +1,31 @@
+﻿<section id="section4" class="cd-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Chess</h1>
+                <div class="box-content contact">
+
+                    <table class="table padded table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-repeat="heading in tableHeaders">
+                                    {{ heading }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="player in data | orderBy: '-grade'">
+                                <td><a target="_blank" href="http://www.ecfgrading.org.uk/new/menu.php?PlayerCode={{ row[0] }}&file=player">{{ player.name }}</a></td>
+                                <td>{{ player.title }}</td>
+                                <td>{{ player.grade }}</td>
+                                <td>{{ player.result }}</td>
+                                <td>{{ player.color }}</td>
+                                <td>{{ player.date | date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- cd-section -->
