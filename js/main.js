@@ -70,8 +70,6 @@
 
         // https://jsfiddle.net/t3f2ybfr/
 
-        $scope.tableHeaders = ["Name", "Title", "Grade", "Result", "Color", "Date"];
-
         $.get('data/data.json', function (data) {
 
           // array to enable me to create js date object for correct table sorting:
@@ -79,18 +77,31 @@
 
           // parse response into JavaScript:
           $scope.data = angular.fromJson(data);
+          $scope.wins = 0;
+          $scope.loses = 0;
+          $scope.draws = 0;
 
           // loop the results and bind to object before pushing to table data:
           $.each($scope.data, function(index, object) {
               var dateSplit = object.date.split('-');
+              var gameDate = new Date(dateSplit[2], dateSplit[1], dateSplit[0]);
+              var today = new Date();
+
+              $scope.wins = parseInt(object.result, 10) === 1 ?  $scope.wins + 1 : $scope.wins;
+              $scope.loses = parseInt(object.result, 10) === 0 ?  $scope.loses + 1 : $scope.loses;
+              $scope.draws = object.result === "½" ?  $scope.draws + 1 : $scope.draws;
+
               var player = {
                 id: object.id,
                 name: object.name,
                 title: object.title,
+                event: object.event,
                 grade: object.grade,
+                elo: object.grade,
                 result: object.result,
                 color: object.color,
-                date: new Date(dateSplit[2], dateSplit[1], dateSplit[0])
+                date: gameDate,
+                gameAge: Math.round(Math.abs((today.getTime() - gameDate.getTime())/(24*60*60*1000)))
               };
               $scope.tableData.push(player);
           });
@@ -99,8 +110,10 @@
         });
 
         // default table filters:
+        $scope.eloMultipler = 7.5;
+        $scope.eloIncriment = 700;
         $scope.sortType = 'date';
-        $scope.sortReverse = false;
+        $scope.sortReverse = true;
         $scope.searchPlayer = '';
     });
 

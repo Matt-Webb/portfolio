@@ -2,20 +2,29 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Chess</h1>
+
+                <div class="text-center">
+                  <nywton-chessgame data-game="game" data-board="boardA"></nywton-chessgame>
+                  <nywton-chessboard data-board="boardB" data-spare-pieces="true" data-position="'start'"></nywton-chessboard>
+                  <div class="col-md-4">
+                    <h1>Wins <br /> {{ wins }}</h1>
+                  </div>
+                  <div class="col-md-4">
+                    <h1>Draws <br /> {{ draws }}</h1>
+                  </div>
+                  <div class="col-md-4">
+                    <h1>Loses <br /> {{ loses }}</h1>
+                  </div>
+                </div>
                 <form class="col-md-offset-3 col-md-6">
                  <div class="form-group">
                    <div class="input-group">
                      <div class="input-group-addon"><i class="fa fa-search"></i></div>
-
                      <input type="text" class="form-control" placeholder="Search my results" ng-model="searchPlayer">
-
                    </div>
                  </div>
                </form>
-
-                <div class="box-content contact">
-
+              <div class="box-content contact">
                     <table class="table padded table-hover">
                         <thead>
                             <tr>
@@ -34,10 +43,24 @@
                                   </a>
                                 </th>
                                 <th>
+                                  <a ng-click="sortType = 'event'; sortReverse = !sortReverse">
+                                  Event
+                                  <span ng-show="sortType == 'event' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'event' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
                                   <a ng-click="sortType = 'grade'; sortReverse = !sortReverse">
                                   Grade
                                   <span ng-show="sortType == 'grade' && !sortReverse" class="fa fa-caret-down"></span>
                                   <span ng-show="sortType == 'grade' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
+                                <th>
+                                  <a ng-click="sortType = 'elo'; sortReverse = !sortReverse">
+                                  Elo*
+                                  <span ng-show="sortType == 'elo' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'elo' && sortReverse" class="fa fa-caret-up"></span>
                                   </a>
                                 </th>
                                 <th>
@@ -61,19 +84,54 @@
                                   <span ng-show="sortType == 'date' && sortReverse" class="fa fa-caret-up"></span>
                                   </a>
                                 </th>
+                                <th>
+                                  <a ng-click="sortType = 'gameAge'; sortReverse = !sortReverse">
+                                  Age (days)
+                                  <span ng-show="sortType == 'gameAge' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'gameAge' && sortReverse" class="fa fa-caret-up"></span>
+                                  </a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="player in tableData | orderBy: sortType:sortReverse | filter:searchPlayer">
-                                <td><a target="_blank" href="http://www.ecfgrading.org.uk/new/menu.php?PlayerCode={{ row[0] }}&file=player">{{ player.name }}</a></td>
+                                <td><a target="_blank" href="http://www.ecfgrading.org.uk/new/menu.php?PlayerCode={{ player.id }}&file=player">{{ player.name }}</a></td>
                                 <td>{{ player.title }}</td>
+                                <td>{{ player.event }}</td>
                                 <td>{{ player.grade }}</td>
+                                <td>{{ eloMultipler * player.elo + eloIncriment }}</td>
                                 <td>{{ player.result }}</td>
                                 <td>{{ player.color }}</td>
                                 <td>{{ player.date | date }}</td>
+                                <td>{{ player.gameAge }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="alert alert-dismissible alert-warning col-md-4">
+                      <div class="row">
+                      <div class="col-md-8">
+                      <h4>Elo conversion</h4>
+                      <p>
+                        The <strong>Elo</strong> provided is not the official FIDE rating of the player, each elo is an ECF conversions using their revised formula. <a href="http://www.englishchess.org.uk/fide-elo-conversion/">see here</a>
+                      </p>
+                      <p>
+                        <label>7.5 * ECF + 700</label>
+                      </p>
+                     </div>
+                       <form class="col-md-4">
+                         <div class="form-group">
+                           <label for="inputMultiplier">Multiplier</label>
+                           <input type="number" class="form-control" id="inputMultiplier" placeholder="Multiplier" ng-model="eloMultipler">
+                         </div>
+                         <div class="form-group">
+                           <label for="InputIncrementor">Incrementor</label>
+                           <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Incrementor" ng-model="eloIncriment">
+                         </div>
+                       </form>
+                     </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
