@@ -21,9 +21,9 @@
     				}
     			},
     			{ // PAGES
-    				url: "/work",
+    				url: "/projects",
     				config: {
-    					templateUrl: "partials/work.html",
+    					templateUrl: "partials/projects.html",
     					controller: "webbBodyController"
     				}
     			},
@@ -64,32 +64,22 @@
 
     });
 
-    app.controller('webbChessController', function ($scope) {
-
-        $scope.title = "Welcome to the chess section!";
+    app.controller('webbChessController', function ($scope, $http) {
 
         // https://jsfiddle.net/t3f2ybfr/
-
-        $.get('data/data.json', function (data) {
-
+        $.get('data/data.json', function(data) {
+          console.log("request complete!");
           // array to enable me to create js date object for correct table sorting:
           $scope.tableData = [];
 
           // parse response into JavaScript:
           $scope.data = angular.fromJson(data);
-          $scope.wins = 0;
-          $scope.loses = 0;
-          $scope.draws = 0;
 
           // loop the results and bind to object before pushing to table data:
           $.each($scope.data, function(index, object) {
               var dateSplit = object.date.split('-');
               var gameDate = new Date(dateSplit[2], dateSplit[1], dateSplit[0]);
               var today = new Date();
-
-              $scope.wins = parseInt(object.result, 10) === 1 ?  $scope.wins + 1 : $scope.wins;
-              $scope.loses = parseInt(object.result, 10) === 0 ?  $scope.loses + 1 : $scope.loses;
-              $scope.draws = object.result === "½" ?  $scope.draws + 1 : $scope.draws;
 
               var player = {
                 id: object.id,
@@ -108,6 +98,19 @@
           // important for rendering:
           $scope.$apply();
         });
+
+        // computes the displayed list of table results for 'wins', 'draws' and 'loses':
+        $scope.resultCount = function(result) {
+          var counter = 0;
+          if($scope.filteredResults) {
+            $.each($scope.filteredResults, function(index, object) {
+              counter = object.result === result ? counter + 1: counter;
+            });
+          }
+          return counter;
+        };
+
+        $scope.selectedNumber = null;
 
         // default table filters:
         $scope.eloMultipler = 7.5;

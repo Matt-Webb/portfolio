@@ -190,7 +190,7 @@ header nav .menu li a{
 	position: relative;
     display: block;
     background-color: #fff;
-    height: 400px;
+    height: 420px;
 }
 .box-img {
 	border: 1px solid #dbdbdb;
@@ -960,4 +960,13 @@ footer .footer-social a:hover{
 	left:0;
 	width:100%;
 	height:100%;
+}
+
+@media screen and (max-width: 400px) {
+  .box-text {
+      height: 460px;
+  }
+  .box-img {
+      height: 340px !important;
+    }
 }
