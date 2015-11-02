@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var app = angular.module('webbApp', ['ngRoute', 'ngMap', 'ngAnimate']);
+    var app = angular.module('webbApp', ['ngRoute', 'ngMap', 'ngAnimate','chart.js']);
 }());
 
 (function (app) {
@@ -99,14 +99,23 @@
           $scope.$apply();
         });
 
+        $scope.labels = ["White", "Black"];
+        $scope.pieData = [0, 0];
+
         // computes the displayed list of table results for 'wins', 'draws' and 'loses':
         $scope.resultCount = function(result) {
           var counter = 0;
+          var countWhite = 0;
+          var countBlack = 0;
           if($scope.filteredResults) {
             $.each($scope.filteredResults, function(index, object) {
-              counter = object.result === result ? counter + 1: counter;
+              counter = object.result === result ? counter + 1 : counter;
+              countWhite = object.color === 'W' ? countWhite + 1 : countWhite;
+              countBlack = object.color === 'B' ? countBlack +1 : countBlack;
             });
           }
+          $scope.pieData[0] = countWhite;
+          $scope.pieData[1] = countBlack;
           return counter;
         };
 
