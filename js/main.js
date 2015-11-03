@@ -64,7 +64,7 @@
 
     });
 
-    app.controller('webbChessController', function ($scope, $http) {
+    app.controller('webbChessController', function ($scope, $http, $filter) {
 
         // https://jsfiddle.net/t3f2ybfr/
         $.get('data/data.json', function(data) {
@@ -102,20 +102,46 @@
         $scope.labels = ["White", "Black"];
         $scope.pieData = [0, 0];
 
+        $scope.filterTableBy = function() {
+          console.log("executing...");
+            $filter($scope.filteredResults)('W');
+        };
+
+        var resultType = {
+          win: "1",
+          loss: "0",
+          draw: "½",
+          color: {
+            white: "W",
+            black: "B"
+          }
+        };
+
         // computes the displayed list of table results for 'wins', 'draws' and 'loses':
-        $scope.resultCount = function(result) {
+        $scope.resultCount = function() {
           var counter = 0;
+
+          var win = 0;
+          var loss = 0;
+          var draw = 0;
+
           var countWhite = 0;
           var countBlack = 0;
           if($scope.filteredResults) {
             $.each($scope.filteredResults, function(index, object) {
-              counter = object.result === result ? counter + 1 : counter;
-              countWhite = object.color === 'W' ? countWhite + 1 : countWhite;
-              countBlack = object.color === 'B' ? countBlack +1 : countBlack;
+              win = object.result === resultType.win ? win + 1 : win;
+              draw = object.result === resultType.draw ? draw + 1 : draw;
+              loss = object.result === resultType.loss ? loss + 1 : loss;
+
+              countWhite = object.color === resultType.color.white ? countWhite + 1 : countWhite;
+              countBlack = object.color === resultType.color.black ? countBlack + 1 : countBlack;
             });
           }
           $scope.pieData[0] = countWhite;
           $scope.pieData[1] = countBlack;
+          $scope.win = win;
+          $scope.loss = loss;
+          $scope.draw = draw;
           return counter;
         };
 
@@ -127,6 +153,9 @@
         $scope.sortType = 'date';
         $scope.sortReverse = true;
         $scope.searchPlayer = '';
+
+        $scope.resultCount();
+
     });
 
 

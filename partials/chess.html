@@ -7,13 +7,13 @@
                   <nywton-chessgame data-game="game" data-board="boardA"></nywton-chessgame>
                   <nywton-chessboard data-board="boardB" data-spare-pieces="true" data-position="'start'"></nywton-chessboard>
                   <div class="col-md-4 col-xs-4">
-                    <h1>Wins <br /> {{ resultCount('1') }}</h1>
+                    <h1>Wins <br /> {{ win }}</h1>
                   </div>
                   <div class="col-md-4 col-xs-4">
-                    <h1>Draws <br /> {{ resultCount('½') }}</h1>
+                    <h1>Draws <br /> {{ draw }}</h1>
                   </div>
                   <div class="col-md-4 col-xs-4">
-                    <h1>Loses <br /> {{ resultCount('0') }}</h1>
+                    <h1>Loses <br /> {{ loss }}</h1>
                   </div>
                 </div>
                 <div class="col-md-offset-4 col-md-4">
@@ -23,7 +23,7 @@
                  <div class="form-group">
                    <div class="input-group">
                      <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                     <input type="text" class="form-control" placeholder="Search my results" ng-model="searchPlayer">
+                     <input type="text" class="form-control" placeholder="Search my results" ng-model="searchPlayer" ng-change="resultCount()">
                    </div>
                  </div>
                </form>
@@ -97,7 +97,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="player in (filteredResults = (tableData | orderBy: sortType:sortReverse | filter:searchPlayer))">
+                            <tr ng-repeat="player in (filteredResults = (tableData | orderBy: sortType:sortReverse | filter: searchPlayer ))">
                                 <td><a target="_blank" href="http://www.ecfgrading.org.uk/new/menu.php?PlayerCode={{ player.id }}&file=player">{{ player.name }}</a></td>
                                 <td>{{ player.title }}</td>
                                 <td>{{ player.result }}</td>
